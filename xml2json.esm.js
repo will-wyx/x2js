@@ -80,12 +80,10 @@ class X2JS {
         return idx !== stdFiltersArrayForm.length;
     }
 
+    // xml to json
     toArrayAccessForm(obj, childName, path) {
         if (this.config.arrayAccessForm === 'property') {
-            if ((obj[childName] instanceof Array))
-                obj[childName + "_asArray"] = obj[childName];
-            else
-                obj[childName + "_asArray"] = [obj[childName]];
+            obj[childName + "_asArray"] = (obj[childName] instanceof Array) ? obj[childName] : [obj[childName]];
         }
 
         if (
@@ -130,6 +128,7 @@ class X2JS {
         return d;
     }
 
+    // xml to json
     checkFromXmlDateTimePaths(value, childName, fullPath) {
         if (this.config.datetimeAccessFormPaths.length > 0) {
             const path = fullPath.split("\.#")[0];
@@ -141,6 +140,7 @@ class X2JS {
             return value;
     }
 
+    // xml to json
     checkXmlElementsFilter(obj, childType, childName, childPath) {
         if (
             childType === DOMNodeTypes.ELEMENT_NODE
@@ -151,6 +151,7 @@ class X2JS {
             return true;
     }
 
+    // xml to json
     parseDOMChildren(node, path) {
         if (node.nodeType === DOMNodeTypes.DOCUMENT_NODE) {
             const result = {};
@@ -264,6 +265,7 @@ class X2JS {
         }
     }
 
+    // json to xml
     startTag(jsonObj, element, attrList, closed) {
         const prefix = ((jsonObj != null && jsonObj.__prefix != null) ? (`${jsonObj.__prefix}:`) : "")
         const result = ["<", prefix, element]
@@ -284,15 +286,18 @@ class X2JS {
         return result.join('');
     }
 
+    // json to xml
     endTag(jsonObj, elementName) {
         const prefix = (jsonObj.__prefix != null ? (`${jsonObj.__prefix}:`) : "")
         return `</${prefix}${elementName}>`;
     }
 
+    // json to xml
     endsWith(str, suffix) {
         return str.indexOf(suffix, str.length - suffix.length) !== -1;
     }
 
+    // json to xml
     jsonXmlSpecialElem(jsonObj, jsonObjField) {
         return (
             (
@@ -305,6 +310,7 @@ class X2JS {
         )
     }
 
+    // json to xml
     jsonXmlElemCount(jsonObj) {
         let elementsCnt = 0;
         if (jsonObj instanceof Object) {
@@ -317,6 +323,7 @@ class X2JS {
         return elementsCnt;
     }
 
+    // json to xml
     checkJsonObjPropertiesFilter(jsonObj, propertyName, jsonObjPath) {
         return (
             this.config.jsonPropertiesFilter.length === 0
@@ -325,6 +332,7 @@ class X2JS {
         )
     }
 
+    // json to xml
     parseJSONAttributes(jsonObj) {
         const attrList = [];
         if (jsonObj instanceof Object) {
@@ -340,6 +348,7 @@ class X2JS {
         return attrList;
     }
 
+    // json to xml
     parseJSONTextAttrs(jsonTxtObj) {
         const result = [];
         if (jsonTxtObj.__cdata != null) {
@@ -351,6 +360,7 @@ class X2JS {
         return result.join('');
     }
 
+    // json to xml
     parseJSONTextObject(jsonTxtObj) {
         let result = '';
         if (jsonTxtObj instanceof Object) {
@@ -362,10 +372,12 @@ class X2JS {
         return result;
     }
 
+    // json to xml
     getJsonPropertyPath(jsonObjPath, jsonPropName) {
         return jsonObjPath === "" ? jsonPropName : `${jsonObjPath}.${jsonPropName}`;
     }
 
+    // json to xml
     parseJSONArray(jsonArrRoot, jsonArrObj, attrList, jsonObjPath) {
         const result = [];
         if (jsonArrRoot.length === 0) {
@@ -380,6 +392,7 @@ class X2JS {
         return result.join('');
     }
 
+    // json to xml
     parseJSONObject(jsonObj, jsonObjPath) {
         const result = [];
         const elementsCnt = this.jsonXmlElemCount(jsonObj);
@@ -501,10 +514,12 @@ class X2JS {
         return xmlDoc !== null ? this.xml2json(xmlDoc) : null;
     }
 
+    // json to xml
     json2xml_str(jsonObj) {
         return this.parseJSONObject(jsonObj, "");
     }
 
+    // json to xml
     json2xml(jsonObj) {
         const xmlDocStr = this.json2xml_str(jsonObj);
         return this.parseXmlString(xmlDocStr);
