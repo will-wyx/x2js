@@ -230,8 +230,14 @@ class X2JS {
                     delete result["#cdata-section_asArray"];
             }
 
-            if (result.__cnt === 0 && this.config.emptyNodeForm === "text") {
-                result = '';
+            if (result.__cnt === 0) {
+                if (this.config.emptyNodeForm === "text") {
+                    result = '';
+                } else if (this.config.emptyNodeForm === "null") {
+                    return null;
+                } else if (this.config.emptyNodeForm === "undefined") {
+                    return undefined;
+                }
             } else if (result.__cnt === 1 && result.__text != null) {
                 result = result.__text;
             } else if (result.__cnt === 1 && result.__cdata != null && !this.config.keepCData) {

@@ -18,8 +18,9 @@
 
 <script type='module'>
     import X2JS from "./xml2json.esm.js";
+
     (() => {
-        const x2js = new X2JS();
+        const x2js = new X2JS({ emptyNodeForm: 'undefined' });
         const xml$ = document.querySelector("#xmlArea")
         const json$ = document.querySelector("#jsonArea")
 
