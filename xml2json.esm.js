@@ -34,6 +34,7 @@ class X2JS {
         this.config.xmlElementsFilter = this.config.xmlElementsFilter ?? [];
         this.config.jsonPropertiesFilter = this.config.jsonPropertiesFilter ?? [];
         this.config.keepCData = this.config.keepCData ?? false;
+        this.config.emptyArrayKeepTag = this.config.emptyArrayKeepTag ?? true;
     }
 
     getNodeLocalName(node) {
@@ -381,7 +382,10 @@ class X2JS {
     parseJSONArray(jsonArrRoot, jsonArrObj, attrList, jsonObjPath) {
         const result = [];
         if (jsonArrRoot.length === 0) {
-            result.push(this.startTag(jsonArrRoot, jsonArrObj, attrList, true));
+            // 空数组是否保留标签
+            if (this.config.emptyArrayKeepTag) {
+                result.push(this.startTag(jsonArrRoot, jsonArrObj, attrList, true));
+            }
         } else {
             for(let arIdx = 0; arIdx < jsonArrRoot.length; arIdx++) {
                 result.push(this.startTag(jsonArrRoot[arIdx], jsonArrObj, this.parseJSONAttributes(jsonArrRoot[arIdx]), false));
